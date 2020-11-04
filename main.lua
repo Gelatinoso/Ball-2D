@@ -1,9 +1,6 @@
 local color = require "color"
 
-local frames = {}
-local activeFrame
-local currentFrame = 1
-local second = os.clock()
+local floorImage = {}
 
 -- Load some default values for our rectangle.
 function love.load()
@@ -41,9 +38,15 @@ function love.load()
     print(love.graphics.getHeight())
 
     --sprite load
-    imageFile = love.graphics.newImage("assets/assets_v2.png")
-    frames[1] = love.graphics.newQuad(0,0,48,48,imageFile:getDimensions())
-    activeFrame = frames[currentFrame]
+    floorSprite = love.graphics.newImage("assets/assets_v2.png")
+    ballSprite = love.graphics.newImage("assets/customassets.png")
+    cloud1Sprite = love.graphics.newImage("assets/clouds.png")
+    cloud2Sprite = love.graphics.newImage("assets/clouds.png")
+
+    floorImage = love.graphics.newQuad(0,0,48,48,floorSprite:getDimensions())
+    ballImage = love.graphics.newQuad(0,0,64,64, ballSprite:getDimensions())
+    cloud1Image = love.graphics.newQuad(0,16,48,16, cloud1Sprite:getDimensions())
+    cloud2Image = love.graphics.newQuad(17,32,63,16, cloud1Sprite:getDimensions())
 
     love.graphics.setBackgroundColor(color.hex("#57a2f7"))
     love.window.setMode(800, 650)
@@ -97,6 +100,19 @@ function love.draw()
 
     love.graphics.setColor(color.hex("#FFFFFFFF"))
     for i = 0, love.graphics.getWidth(), 48 do
-      love.graphics.draw(imageFile, activeFrame, i, love.graphics.getHeight()-150/2)
+      love.graphics.draw(floorSprite, floorImage, i, love.graphics.getHeight()-150/2)
     end
+
+    love.graphics.draw(cloud1Sprite, cloud1Image, 200, 50)
+    love.graphics.draw(cloud2Sprite, cloud2Image, 500, 75)
+    love.graphics.draw(
+      ballSprite,
+      ballImage,
+      objects.ball.body:getX(),
+      objects.ball.body:getY(),
+      0,
+      0.65, --texture size options
+      0.65,
+      objects.ball.shape:getRadius()+ 12,
+      objects.ball.shape:getRadius()+ 12)
   end
